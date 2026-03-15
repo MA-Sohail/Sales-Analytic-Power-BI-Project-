@@ -1,0 +1,35 @@
+table Products
+	lineageTag: e91b3609-0f14-45ec-9908-65cd7b86fa99
+
+	column Index
+		dataType: int64
+		formatString: 0
+		lineageTag: b0dd56a6-77a6-406a-912a-915321e67c67
+		summarizeBy: sum
+		sourceColumn: Index
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Product Name'
+		dataType: string
+		lineageTag: 21df2498-a6a2-4a1c-b832-98929d36fd31
+		summarizeBy: none
+		sourceColumn: Product Name
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Products = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\MASOHAIL\Desktop\VI\Microsoft Elevate\Campfly Sales Analysis Dashboard.xlsx"), null, true),
+				    Products_Sheet = Source{[Item="Products",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(Products_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Index", Int64.Type}, {"Product Name", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

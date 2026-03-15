@@ -1,0 +1,23 @@
+relationship beb39a32-8c82-4e68-8c83-d61d926473af
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Sales Orders'.OrderDate
+	toColumn: LocalDateTable_cca8006a-3e9f-4bb8-bc0c-142f543b8b6f.Date
+
+relationship 649f541f-f6fe-4422-ac80-19b471e969d2
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Sales Orders'.'Ship Date'
+	toColumn: LocalDateTable_537109bc-5932-4a02-9299-68f98c106962.Date
+
+relationship AutoDetected_23b5dd64-4ed7-4665-8542-6b90de9c449b
+	fromColumn: 'Sales Orders'.'Customer Name Index'
+	toColumn: Customers.'Customer Index'
+
+relationship f9fe10c6-3467-1e0b-832e-dc3568b774bc
+	fromColumn: 'Sales Orders'.'Delivery Region Index'
+	toColumn: Regions.Index
+
+relationship a6f98745-1f07-df88-72f8-dbaebde7d33f
+	isActive: false
+	fromColumn: 'Sales Orders'.'Product Description Index'
+	toColumn: Products.Index
+

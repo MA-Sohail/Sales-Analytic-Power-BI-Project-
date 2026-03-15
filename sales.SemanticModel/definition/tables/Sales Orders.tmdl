@@ -1,0 +1,172 @@
+table 'Sales Orders'
+	lineageTag: f7ef32b3-6ddb-445b-8c1d-8ac62345bf8d
+
+	measure 'Total Sales' = SUM('Sales Orders'[Total Revenue])
+		formatString: $#,0
+		lineageTag: a1b2c3d4-0001-0001-0001-000000000001
+
+	measure 'Total Cost' = SUMX('Sales Orders', 'Sales Orders'[Order Quantity] * 'Sales Orders'[Total Unit Cost])
+		formatString: $#,0
+		lineageTag: a1b2c3d4-0001-0001-0001-000000000002
+
+	measure 'Total Profit' = [Total Sales] - [Total Cost]
+		formatString: $#,0
+		lineageTag: a1b2c3d4-0001-0001-0001-000000000003
+
+	measure 'Profit Margin %' = DIVIDE([Total Profit], [Total Sales], 0)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: a1b2c3d4-0001-0001-0001-000000000004
+
+	measure 'Total Orders' = DISTINCTCOUNT('Sales Orders'[OrderNumber])
+		formatString: #,0
+		lineageTag: a1b2c3d4-0001-0001-0001-000000000005
+
+	measure 'Avg Fulfillment Time' = AVERAGEX('Sales Orders', DATEDIFF('Sales Orders'[OrderDate], 'Sales Orders'[Ship Date], DAY))
+		formatString: 0.0
+		lineageTag: a1b2c3d4-0001-0001-0001-000000000006
+
+	column OrderNumber
+		dataType: string
+		lineageTag: b0b13f50-550f-4c00-869d-dd590a6f2d16
+		summarizeBy: none
+		sourceColumn: OrderNumber
+
+		annotation SummarizationSetBy = Automatic
+
+	column OrderDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: ac9dff8b-676b-47f6-9bc1-18ce6f2428df
+		summarizeBy: none
+		sourceColumn: OrderDate
+
+		variation Variation
+			isDefault
+			relationship: beb39a32-8c82-4e68-8c83-d61d926473af
+			defaultHierarchy: LocalDateTable_cca8006a-3e9f-4bb8-bc0c-142f543b8b6f.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Ship Date'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 505f0b96-5e88-4adb-9a41-6c72c3bf94e5
+		summarizeBy: none
+		sourceColumn: Ship Date
+
+		variation Variation
+			isDefault
+			relationship: 649f541f-f6fe-4422-ac80-19b471e969d2
+			defaultHierarchy: LocalDateTable_537109bc-5932-4a02-9299-68f98c106962.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Customer Name Index'
+		dataType: int64
+		formatString: 0
+		lineageTag: e7418e4c-b141-4f33-8ac1-981f0d6373a0
+		summarizeBy: none
+		sourceColumn: Customer Name Index
+
+		annotation SummarizationSetBy = Automatic
+
+	column Channel
+		dataType: string
+		lineageTag: 13ca05be-d89a-4948-8b4c-6b95567f3ee4
+		summarizeBy: none
+		sourceColumn: Channel
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Currency Code'
+		dataType: string
+		lineageTag: 1efec537-6e4e-4cd2-a162-fb2d828fa7ce
+		summarizeBy: none
+		sourceColumn: Currency Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Warehouse Code'
+		dataType: string
+		lineageTag: 99be203f-6428-4314-a562-b28f631dba7e
+		summarizeBy: none
+		sourceColumn: Warehouse Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Delivery Region Index'
+		dataType: int64
+		formatString: 0
+		lineageTag: b1ca3339-7c76-42ad-ad10-7118804bfe1a
+		summarizeBy: none
+		sourceColumn: Delivery Region Index
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Product Description Index'
+		dataType: int64
+		formatString: 0
+		lineageTag: 4994a7ad-1a09-4467-9c2a-0bd5c1b71eb5
+		summarizeBy: sum
+		sourceColumn: Product Description Index
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Order Quantity'
+		dataType: int64
+		formatString: 0
+		lineageTag: a5d6831c-4df5-4270-8123-d98d174f3b72
+		summarizeBy: sum
+		sourceColumn: Order Quantity
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Unit Price'
+		dataType: double
+		lineageTag: 085f542e-8311-421c-b848-ea7558a4f844
+		summarizeBy: sum
+		sourceColumn: Unit Price
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Total Unit Cost'
+		dataType: double
+		lineageTag: 5d82158e-ad6c-469f-b3e4-42e5da408350
+		summarizeBy: sum
+		sourceColumn: Total Unit Cost
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Total Revenue'
+		dataType: double
+		lineageTag: 1c4d984f-d2ed-469a-8249-45febe59feea
+		summarizeBy: sum
+		sourceColumn: Total Revenue
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition 'Sales Orders' = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\MASOHAIL\Desktop\VI\Microsoft Elevate\Campfly Sales Analysis Dashboard.xlsx"), null, true),
+				    #"Sales Orders_Sheet" = Source{[Item="Sales Orders",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(#"Sales Orders_Sheet", [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"OrderNumber", type text}, {"OrderDate", type date}, {"Ship Date", type date}, {"Customer Name Index", Int64.Type}, {"Channel", type text}, {"Currency Code", type text}, {"Warehouse Code", type text}, {"Delivery Region Index", Int64.Type}, {"Product Description Index", Int64.Type}, {"Order Quantity", Int64.Type}, {"Unit Price", type number}, {"Total Unit Cost", type number}, {"Total Revenue", type number}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

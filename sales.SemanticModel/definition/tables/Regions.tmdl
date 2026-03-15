@@ -1,0 +1,80 @@
+table Regions
+	lineageTag: 55e1107e-ca1b-48b7-96c5-68758da81cdd
+
+	column Index
+		dataType: int64
+		formatString: 0
+		lineageTag: 4fc646f5-29f9-47a8-8f30-1c04f4a0990f
+		summarizeBy: none
+		sourceColumn: Index
+
+		annotation SummarizationSetBy = Automatic
+
+	column Suburb
+		dataType: string
+		lineageTag: bf6e63f7-e4b7-4d32-9401-1807efa504cc
+		summarizeBy: none
+		sourceColumn: Suburb
+
+		annotation SummarizationSetBy = Automatic
+
+	column City
+		dataType: string
+		lineageTag: f1ed51a4-a000-41b6-8af1-09a843d74179
+		summarizeBy: none
+		sourceColumn: City
+
+		annotation SummarizationSetBy = Automatic
+
+	column postcode
+		dataType: int64
+		formatString: 0
+		lineageTag: de9e702d-457d-4cbc-9787-849013bf3675
+		summarizeBy: none
+		sourceColumn: postcode
+
+		annotation SummarizationSetBy = Automatic
+
+	column Longitude
+		dataType: double
+		lineageTag: a71fca7f-7016-4699-b4ba-ad803c76e191
+		summarizeBy: none
+		sourceColumn: Longitude
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Latitude
+		dataType: double
+		lineageTag: a6fea9d5-50f8-4fad-9850-22fc7abf608e
+		summarizeBy: none
+		sourceColumn: Latitude
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Full Address'
+		dataType: string
+		lineageTag: 79ae88dc-e14f-4620-aea9-e6ef27622d82
+		summarizeBy: none
+		sourceColumn: Full Address
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Regions = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\MASOHAIL\Desktop\VI\Microsoft Elevate\Campfly Sales Analysis Dashboard.xlsx"), null, true),
+				    Regions_Sheet = Source{[Item="Regions",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(Regions_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Index", Int64.Type}, {"Suburb", type text}, {"City", type text}, {"postcode", Int64.Type}, {"Longitude", type number}, {"Latitude", type number}, {"Full Address", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

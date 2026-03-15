@@ -1,0 +1,74 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 0,
+            "y": 358.73729071770708
+          },
+          "nodeIndex": "Customers",
+          "nodeLineageTag": "f583219b-90b3-42f8-b483-353e4716ba6e",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 947.09866071164447,
+            "y": 346.053292392557
+          },
+          "nodeIndex": "Products",
+          "nodeLineageTag": "e91b3609-0f14-45ec-9908-65cd7b86fa99",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 489.75068360126045,
+            "y": 0
+          },
+          "nodeIndex": "Regions",
+          "nodeLineageTag": "55e1107e-ca1b-48b7-96c5-68758da81cdd",
+          "size": {
+            "height": 248,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 469.98127787719085,
+            "y": 405.88794640480188
+          },
+          "nodeIndex": "Sales Orders",
+          "nodeLineageTag": "f7ef32b3-6ddb-445b-8c1d-8ac62345bf8d",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "All tables",
+      "zoomValue": 70.95554390096882,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "All tables",
+  "defaultDiagram": "All tables"
+}
